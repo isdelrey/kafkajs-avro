@@ -1,5 +1,5 @@
 import fetch from "node-fetch"
-import avsc from "avsc"
+import * as avsc from "avsc"
 
 class Registry {
     url: string
@@ -19,22 +19,21 @@ class Registry {
 
         /* Schema is not in cache, download it: */
         let url
-        if (filter.id) url = `/schemas/ids/${filter.id}`
+        if (filter.id) url = `${this.url}/schemas/ids/${filter.id}`
         if (filter.subject && filter.version)
-            url = `${this.url}/subjects/${filter.subject}/${filter.version}`
+            url = `${this.url}/subjects/${filter.subject}/versions/${filter.version}`
         if (url == undefined)
             throw new Error(
                 "In order to fetch a schema, an object with format {id} or {subject, version} must be provided"
             )
 
-        const response = fetch(url)
-        if (response.statusCode != 200)
-            throw new Error(
-                `${
-                    response.statusCode
+        const response = await fetch(url)
+        if (response.status != 200)
+            throw new Error(`${
+                response.status
                 } response code from registry when trying to fetch ${JSON.stringify(
                     filter
-                )}\n${response.body}`
+                )}\n${url}\n${response.statusText}`
             )
         const { id, schema } = await response.json()
         const parsedSchema = avsc.parse(schema, this.parseOptions)

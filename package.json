@@ -4,13 +4,19 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "tsc"
     },
     "author": "Ivo Sequeros del Rey",
     "license": "ISC",
     "dependencies": {
+        "@types/kafkajs": "^1.4.1",
         "avsc": "^5.4.7",
         "kafkajs": "^1.7.0",
         "node-fetch": "^2.3.0"
+    },
+    "devDependencies": {
+        "@types/node": "^11.13.4",
+        "typescript": "^3.4.3"
     }
 }

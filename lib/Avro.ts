@@ -1,49 +1,71 @@
-import { Kafka } from "kafkajs"
+import { Kafka, ProducerMessage, MessagePayload } from "kafkajs"
 import Registry from "./Registry"
+
+interface AvroProducerMessage extends ProducerMessage {
+    subject: string
+    version?: string
+    value: any
+}
+
+interface AvroMessagePayload extends MessagePayload {
+    topic: string
+    messages: AvroProducerMessage[]
+}
 
 class Avro {
     registry: Registry
     kafka: Kafka
     parseOptions: any
-    constructor(
-        kafka: Kafka,
-        { url, parseOptions }: { url: string; parseOptions: any }
-    ) {
-        this.registry = new Registry({ url, parseOptions })
-        this.parseOptions = parseOptions
+    constructor(kafka: Kafka, opts) {
+        this.registry = new Registry(opts)
         this.kafka = kafka
     }
-    consumer() {
-        const consumer = this.kafka.consumer()
+    consumer(args) {
+        const consumer = this.kafka.consumer(args)
         return {
             ...consumer,
             run: args =>
                 consumer.run({
                     ...args,
                     eachMessage: async messageArgs => {
-                        const message = await this.registry.decode(
-                            messageArgs.message
+                        // Discard invalid avro messages
+                        if (messageArgs.message.value.readUInt8(0) !== 0) return
+
+                        const value = await this.registry.decode(
+                            messageArgs.message.value
                         )
                         return args.eachMessage({
                             ...messageArgs,
-                            message
+                            message: {
+                                ...messageArgs.message,
+                                value
+                            }
                         })
                     }
                 })
         }
     }
-    producer() {
-        const producer = this.kafka.producer()
+    producer(args?) {
+        const producer = this.kafka.producer(args)
         return {
             ...producer,
-            send: async ({ version, topic, ...args }) => {
+            send: async ({ topic, ...args }: AvroMessagePayload) => {
                 return await producer.send({
                     ...args,
                     topic,
                     messages: await Promise.all(
-                        args.messages.map(message =>
-                            this.registry.encode(topic, args, message)
-                        )
+                        args.messages.map(async message => {
+                            const value = await this.registry.encode(
+                                message.subject,
+                                message.version || "latest",
+                                message.value
+                            )
+
+                            return {
+                                ...message,
+                                value
+                            }
+                        })
                     )
                 })
             },
@@ -57,7 +79,7 @@ class Avro {
                                 topicName.messages.map(message =>
                                     this.registry.encode(
                                         topicName.topic,
-                                        topicName.version,
+                                        topicName.version || "latest",
                                         message
                                     )
                                 )

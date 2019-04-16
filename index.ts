@@ -1,10 +1,11 @@
-import { Kafka } from "kafkajs"
+import { Kafka, KafkaOptions } from "kafkajs"
 import Avro from "./lib/Avro"
 
-interface Settings {
+interface Settings extends KafkaOptions {
+    // This library's settings
     avro: {
         url: string
-        parseOptions: any
+        parseOptions?: any
     }
 }
 
