@@ -1,5 +1,5 @@
 {
-    "name": "kafka-avro",
+    "name": "kafkajs-avro",
     "version": "1.0.0",
     "description": "",
     "main": "index.js",
