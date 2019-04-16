@@ -1,0 +1,16 @@
+{
+    "name": "kafka-avro",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "Ivo Sequeros del Rey",
+    "license": "ISC",
+    "dependencies": {
+        "avsc": "^5.4.7",
+        "kafkajs": "^1.7.0",
+        "node-fetch": "^2.3.0"
+    }
+}

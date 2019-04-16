@@ -1,0 +1,68 @@
+import fetch from "node-fetch"
+import avsc from "avsc"
+
+class Registry {
+    url: string
+    parseOptions: any
+    cache: Map<
+        { subject: string; version: string },
+        { id: number; schema: Buffer }
+    >
+    constructor({ url, parseOptions }) {
+        this.url = url
+        this.parseOptions = parseOptions
+        this.cache = new Map()
+    }
+    async getSchema(filter) {
+        /* Check if schema is in cache: */
+        if (this.cache.has(filter)) return this.cache.get(filter)
+
+        /* Schema is not in cache, download it: */
+        let url
+        if (filter.id) url = `/schemas/ids/${filter.id}`
+        if (filter.subject && filter.version)
+            url = `${this.url}/subjects/${filter.subject}/${filter.version}`
+        if (url == undefined)
+            throw new Error(
+                "In order to fetch a schema, an object with format {id} or {subject, version} must be provided"
+            )
+
+        const response = fetch(url)
+        if (response.statusCode != 200)
+            throw new Error(
+                `${
+                    response.statusCode
+                } response code from registry when trying to fetch ${JSON.stringify(
+                    filter
+                )}\n${response.body}`
+            )
+        const { id, schema } = await response.json()
+        const parsedSchema = avsc.parse(schema, this.parseOptions)
+
+        /* Result */
+        const result = { id: filter.id || id, schema: parsedSchema }
+        this.cache.set(filter, result)
+        return result
+    }
+    async encode(subject, version, originalMessage) {
+        const { id, schema } = await this.getSchema({ subject, version })
+        const encodedMessage = schema.toBuffer(originalMessage)
+
+        const message = Buffer.alloc(encodedMessage.length + 5)
+        message.writeUInt8(0, 0)
+        message.writeUInt32BE(id, 1)
+        encodedMessage.copy(message, 5)
+
+        return message
+    }
+    async decode(object) {
+        if (object.readUInt8(0) !== 0)
+            throw new Error(`Message doesn't contain schema identifier byte.`)
+        const id = object.readUInt32BE(1)
+
+        const { schema } = await this.getSchema({ id })
+        return schema.fromBuffer(object.slice(5))
+    }
+}
+
+export default Registry
