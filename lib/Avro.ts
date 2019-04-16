@@ -45,28 +45,31 @@ class Avro {
                 })
         }
     }
+    private encodeMessages(messages): Promise<AvroProducerMessage[]> {
+        return Promise.all(
+            messages.map(async message => {
+                const value = await this.registry.encode(
+                    message.subject,
+                    message.version || "latest",
+                    message.value
+                )
+
+                return {
+                    ...message,
+                    value
+                }
+            })
+        )
+    }
     producer(args?) {
         const producer = this.kafka.producer(args)
         return {
             ...producer,
             send: async ({ topic, ...args }: AvroMessagePayload) => {
-                return await producer.send({
+                return producer.send({
                     ...args,
                     topic,
-                    messages: await Promise.all(
-                        args.messages.map(async message => {
-                            const value = await this.registry.encode(
-                                message.subject,
-                                message.version || "latest",
-                                message.value
-                            )
-
-                            return {
-                                ...message,
-                                value
-                            }
-                        })
-                    )
+                    messages: await this.encodeMessages(args.messages)
                 })
             },
             sendBatch: async args => {
@@ -75,15 +78,7 @@ class Avro {
                     topicNames: await Promise.all(
                         args.topicNames.map(async topicName => ({
                             ...topicName,
-                            messages: await Promise.all(
-                                topicName.messages.map(message =>
-                                    this.registry.encode(
-                                        topicName.topic,
-                                        topicName.version || "latest",
-                                        message
-                                    )
-                                )
-                            )
+                            messages: await this.encodeMessages(topicName.messages)
                         }))
                     )
                 })

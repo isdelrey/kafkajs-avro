@@ -77,3 +77,4 @@ typings/
 
 # Builds
 build
+package-lock.json

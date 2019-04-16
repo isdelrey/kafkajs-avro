@@ -5,8 +5,8 @@ class Registry {
     url: string
     parseOptions: any
     cache: Map<
-        { subject: string; version: string },
-        { id: number; schema: Buffer }
+        string,
+        { id: number; schema: string }
     >
     constructor({ url, parseOptions }) {
         this.url = url
@@ -14,8 +14,15 @@ class Registry {
         this.cache = new Map()
     }
     async getSchema(filter) {
+        const key = filter.id ? filter.id : `${filter.subject}:${filter.version}`
         /* Check if schema is in cache: */
-        if (this.cache.has(filter)) return this.cache.get(filter)
+        if (this.cache.has(key)) {
+            const { id, schema } = this.cache.get(key)
+            return {
+                id,
+                schema: avsc.parse(schema, this.parseOptions)
+            }
+        }
 
         /* Schema is not in cache, download it: */
         let url
@@ -39,9 +46,8 @@ class Registry {
         const parsedSchema = avsc.parse(schema, this.parseOptions)
 
         /* Result */
-        const result = { id: filter.id || id, schema: parsedSchema }
-        this.cache.set(filter, result)
-        return result
+        this.cache.set(key, { id: filter.id || id, schema })
+        return { id: filter.id || id, schema: parsedSchema }
     }
     async encode(subject, version, originalMessage) {
         const { id, schema } = await this.getSchema({ subject, version })
