@@ -13,7 +13,7 @@ async function QuickStart() {
 
     setInterval(() => {
         producer.send({
-            topic: "barcelona",
+            topic: "<topic>",
             messages: [{
                 subject: "<subject>",
                 version: "latest",
