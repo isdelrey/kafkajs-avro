@@ -13,7 +13,7 @@ This library combines [Kafka.js](<https://github.com/tulios/kafkajs>) and [Avsc]
 
 #### Install
 
-Run `npm i -s kafkajs-avro` or`yarn add kafkajs-avro`
+Run `npm i -s kafkajs-avro` or `yarn add kafkajs-avro`
 
 #### Quickstart code
 
