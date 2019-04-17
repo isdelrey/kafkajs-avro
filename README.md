@@ -124,6 +124,10 @@ import KafkaAvro from "@ivosequeros/kafkajs-avro"
 
 All features from Kafka.js are preserved and adapted. Take a look at the [Kafka.js](<https://github.com/tulios/kafkajs>) project to see what's available. All extra settings and variables required by this library are highlighted with `[Extra setting]` on the examples.
 
+#### Avro schema cache
+
+Requests to the avro registry are minimised by locally caching schemas
+
 #### Available modules
 
 ```typescript
