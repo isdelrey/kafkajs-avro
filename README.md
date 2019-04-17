@@ -120,7 +120,7 @@ import KafkaAvro from "@ivosequeros/kafkajs-avro"
 
 
 
-#### Underlaying features from Kafka.js
+#### Underlying features from Kafka.js
 
 All features from Kafka.js are preserved and adapted. Take a look at the [Kafka.js](<https://github.com/tulios/kafkajs>) project to see what's available. All extra settings and variables required by this library are highlighted with `[Extra setting]` on the examples.
 
