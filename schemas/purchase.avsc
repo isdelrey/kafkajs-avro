@@ -1,0 +1,48 @@
+{
+    "type" : "record",
+    "name" : "MyClass",
+    "namespace" : "com.test.avro",
+    "fields" : [ {
+      "name" : "customer",
+      "type" : {
+        "type" : "record",
+        "name" : "customer",
+        "fields" : [ {
+          "name" : "name",
+          "type" : "string"
+        }, {
+          "name" : "address",
+          "type" : "string"
+        } ]
+      }
+    }, {
+      "name" : "purchase",
+      "type" : {
+        "type" : "record",
+        "name" : "purchase",
+        "fields" : [ {
+          "name" : "total_amount",
+          "type" : "long"
+        }, {
+          "name" : "line_items",
+          "type" : {
+            "type" : "array",
+            "items" : {
+              "type" : "record",
+              "name" : "line_items",
+              "fields" : [ {
+                "name" : "name",
+                "type" : "string"
+              }, {
+                "name" : "amount",
+                "type" : "long"
+              }, {
+                "name" : "quantity",
+                "type" : "long"
+              } ]
+            }
+          }
+        } ]
+      }
+    } ]
+  }

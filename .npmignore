@@ -1,2 +1,8 @@
 docs
 examples
+docker-compose.yml
+scripts
+schemas
+testHelpers
+*.spec.ts
+jest.config.js
