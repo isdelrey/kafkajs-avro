@@ -126,7 +126,7 @@ All features from Kafka.js are preserved and adapted. Take a look at the [Kafka.
 
 #### Avro schema cache
 
-Requests to the avro registry are minimised by locally caching schemas
+Requests to the avro registry are minimised by locally caching schemas.
 
 #### Available modules
 
