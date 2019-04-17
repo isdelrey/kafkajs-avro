@@ -18,7 +18,7 @@ Run `npm i -s kafkajs-avro` or `yarn add kafkajs-avro`
 #### Quickstart code
 
 ```typescript
-import KafkaAvro from "kafkajs-avro"
+import KafkaAvro from "@ivosequeros/kafkajs-avro"
 
 (async () {
     const kafka = new KafkaAvro({
@@ -60,7 +60,7 @@ import KafkaAvro from "kafkajs-avro"
 #### Consumer example
 
 ```typescript
-import KafkaAvro from "kafkajs-avro"
+import KafkaAvro from "@ivosequeros/kafkajs-avro"
 
 (async () => {
     const kafka = new KafkaAvro({
@@ -92,7 +92,7 @@ import KafkaAvro from "kafkajs-avro"
 #### Producer example
 
 ```typescript
-import KafkaAvro from "kafkajs-avro"
+import KafkaAvro from "@ivosequeros/kafkajs-avro"
 
 (async () => {
     const kafka = new KafkaAvro({
@@ -127,7 +127,7 @@ All features from Kafka.js are preserved and adapted. Take a look at the [Kafka.
 #### Available modules
 
 ```typescript
-import KafkaAvro, {KafkaAvro, Avro, Kafka} from "kafkajs-avro"
+import KafkaAvro, {KafkaAvro, Avro, Kafka} from "@ivosequeros/kafkajs-avro"
 ```
 
 `Kafka` is `kafkajs`.
