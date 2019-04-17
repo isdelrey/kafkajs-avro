@@ -1,6 +1,6 @@
-import KafkaAvro from ".."
+import KafkaAvro from "@ivosequeros/kafkajs-avro"
 
-async function QuickStart() {
+(async () => {
     const kafka = new KafkaAvro({
         clientId: "<client-id>",
         brokers: ["<hostname>:9092"],
@@ -32,6 +32,4 @@ async function QuickStart() {
             console.log(message.value)
         }
     })
-}
-
-QuickStart()
+})()
