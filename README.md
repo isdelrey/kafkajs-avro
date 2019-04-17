@@ -1,7 +1,8 @@
 <p align="left">
     <img alt="stuart logo" src="https://github.com/ivosequeros/kafkajs-avro/blob/master/docs/header.png?raw=true" width="500">
 </p>
-**A modern Apacha Kafka client for node.js coupled with Avro support**
+
+**A modern Apacha Kafka client for node.js coupled with Avro support**\
 This library combines [Kafka.js](<https://github.com/tulios/kafkajs>) and [Avsc](<https://github.com/mtth/avsc>) to provide seamless and unopinionated avro encoding/decoding for your kafka messages using a minimum of dependencies.
 
 #### Dependencies
@@ -12,7 +13,7 @@ This library combines [Kafka.js](<https://github.com/tulios/kafkajs>) and [Avsc]
 
 #### Install
 
-Run `npm i -s kafkajs-avro` or`yarn add kafkajs-avro`
+Run `npm i -s kafkajs-avro` or `yarn add kafkajs-avro`
 
 #### Quickstart code
 
