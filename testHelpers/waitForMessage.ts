@@ -1,21 +1,21 @@
-import waitFor from './waitFor'
+import waitFor from "./waitFor";
 
 export default async ({ consumer, matches, timeout = 10000 }) => {
-    let matchingMessage
+  let matchingMessage;
 
-    consumer.run({
-      eachMessage: async ({ topic, partition, message }) => {
-        if (matches({ topic, partition, message })) {
-          matchingMessage = message
-        }
-      },
-    })
-  
-    return waitFor(async duration => {
-      if (duration > timeout) {
-        throw new Error('Timeout waiting for message')
+  consumer.run({
+    eachMessage: async ({ topic, partition, message }) => {
+      if (matches({ topic, partition, message })) {
+        matchingMessage = message;
       }
-  
-      return matchingMessage != null
-    })
-  }
+    }
+  });
+
+  return waitFor(async duration => {
+    if (duration > timeout) {
+      throw new Error("Timeout waiting for message");
+    }
+
+    return matchingMessage != null;
+  });
+};
