@@ -1,2 +1,4 @@
 docs
 examples
+.DS_Store
+.gitattributes

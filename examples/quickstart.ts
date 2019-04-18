@@ -1,4 +1,4 @@
-import KafkaAvro from "@ivosequeros/kafkajs-avro"
+import KafkaAvro from "kafkajs-avro"
 
 (async () => {
     const kafka = new KafkaAvro({
