@@ -1,6 +1,6 @@
 {
     "name": "kafkajs-avro",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "KafkaJS + unopinionated Avro encoding/decoding based on subject and version",
     "main": "build/index.js",
     "types": "build/index.d.ts",
@@ -8,6 +8,9 @@
         "test": "yarn lint && ./scripts/testWithKafka.sh 'jest --forceExit --detectOpenHandles --ci --maxWorkers=4 --no-watchman'",
         "test:watch": "./scripts/testWithKafka.sh 'jest --watch --forceExit --detectOpenHandles --maxWorkers=4 --no-watchman'",
         "build": "tsc",
+        "prepare": "npm run build",
+        "prepublishOnly": "npm test && npm run lint",
+        "preversion": "npm run lint",
         "docker:up": "./scripts/dockerComposeUp.sh",
         "docker:down": "docker-compose down",
         "lint": "prettier --parser typescript --list-different \"**/*.{ts,tsx}\"",

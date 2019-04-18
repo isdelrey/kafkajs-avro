@@ -6,6 +6,13 @@
         "declaration": true,
         "outDir": "build",
         "skipLibCheck": true,
-        "typeRoots": ["node_modules/@types", "node_modules/types"]
-    }
+        "typeRoots": [
+            "node_modules/@types",
+            "node_modules/types"
+        ]
+    },
+    "exclude": [
+        "./examples/**/*",
+        "./build/**/*"
+    ]
 }
