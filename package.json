@@ -5,8 +5,13 @@
     "main": "build/index.js",
     "types": "build/index.d.ts",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "build": "tsc"
+        "test": "yarn lint && ./scripts/testWithKafka.sh 'jest --forceExit --detectOpenHandles --ci --maxWorkers=4 --no-watchman'",
+        "test:watch": "./scripts/testWithKafka.sh 'jest --watch --forceExit --detectOpenHandles --maxWorkers=4 --no-watchman'",
+        "build": "tsc",
+        "docker:up": "./scripts/dockerComposeUp.sh",
+        "docker:down": "docker-compose down",
+        "lint": "prettier --parser typescript --list-different \"**/*.{ts,tsx}\"",
+        "format": "prettier --parser typescript --write \"**/*.{ts,tsx}\""
     },
     "keywords": [
         "avro",
@@ -32,7 +37,14 @@
         "url": "https://github.com/ivosequeros/node-kafkajs-avro/issues"
     },
     "devDependencies": {
+        "@types/jest": "^24.0.11",
         "@types/node": "^11.13.4",
-        "typescript": "^3.4.3"
+        "@types/uuid": "^3.4.4",
+        "execa": "^1.0.0",
+        "jest": "^24.7.1",
+        "prettier": "^1.17.0",
+        "ts-jest": "^24.0.2",
+        "typescript": "^3.4.3",
+        "uuid": "^3.3.2"
     }
 }
