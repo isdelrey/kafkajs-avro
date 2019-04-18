@@ -1,6 +1,6 @@
 {
     "name": "kafkajs-avro",
-    "version": "1.0.0",
+    "version": "1.0.2",
     "description": "KafkaJS + unopinionated Avro encoding/decoding based on subject and version",
     "main": "build/index.js",
     "types": "build/index.d.ts",
@@ -20,8 +20,8 @@
         "decode",
         "encode"
     ],
-    "author": "Ivo Sequeros del Rey",
-    "license": "ISC",
+    "author": "Ivo Sequeros",
+    "license": "GPL-3.0",
     "dependencies": {
         "@types/kafkajs": "^1.4.1",
         "avsc": "^5.4.7",

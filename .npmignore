@@ -6,3 +6,5 @@ schemas
 testHelpers
 *.spec.ts
 jest.config.js
+.DS_Store
+.gitattributes
