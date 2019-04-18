@@ -1,6 +1,6 @@
 {
     "name": "kafkajs-avro",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "description": "KafkaJS + unopinionated Avro encoding/decoding based on subject and version",
     "main": "build/index.js",
     "types": "build/index.d.ts",
