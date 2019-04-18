@@ -72,7 +72,7 @@ import KafkaAvro from "kafkajs-avro"
     })
 
     /* Consumer
-       The consumer does not require any extra settings to build a consumer.
+       The consumer does not require any extra settings to be built.
        You may just remove .avro from the next line and you will see raw messages from
        the brokers - without avro decoding.
     */
