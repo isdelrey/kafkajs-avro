@@ -59,8 +59,13 @@ class Registry {
     return message;
   }
   async decode(object) {
-    if (object.readUInt8(0) !== 0)
-      throw new Error(`Message doesn't contain schema identifier byte.`);
+    /*
+      The following line is not needed because this check is done in the eachMessage function of
+      the consumer. It has not been removed in case this module is used alone in the future
+    
+      if (object.readUInt8(0) !== 0)
+        throw new Error(`Message doesn't contain schema identifier byte.`);
+    */
     const id = object.readUInt32BE(1);
 
     const { schema } = await this.getSchema({ id });
