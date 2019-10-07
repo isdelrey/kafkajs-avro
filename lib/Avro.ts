@@ -29,7 +29,13 @@ class Avro {
           ...args,
           eachMessage: async messageArgs => {
             // Discard invalid avro messages
-            if (messageArgs.message.value.readUInt8(0) !== 0) return;
+            try {
+              if (messageArgs.message.value.readUInt8(0) !== 0) return;
+            } catch (error) {
+              // value is null?
+              return;
+            }
+
 
             const value = await this.registry.decode(messageArgs.message.value);
             return args.eachMessage({
