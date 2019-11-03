@@ -43,9 +43,81 @@ class Avro {
         })
     };
   }
-  private encodeMessages(messages): Promise<AvroProducerMessage[]> {
+  private async encodeMessages(messages): Promise<AvroProducerMessage[]> {
+    // first phase: ensure all schema are downloaded, parsed and cached
+    // prepare list of unique schemas here
+    const schemas = {};
+    messages.forEach(message => {
+      const filter = {
+        subject: message.subject,
+        version: message.version || "latest"
+      };
+      const subject = `${filter.subject}:${filter.version}`;
+      if (!schemas.hasOwnProperty(subject)) {
+        schemas[subject] = filter;
+      }
+
+      if (message.key) {
+        const split = message.subject.split("-value");
+        if (split.length == 2 && split[0] != "" && split[1] == "") {
+          const keyFilter = {
+            subject: split[0] + "-key",
+            version: message.keyVersion || "latest"
+          };
+          const key = `${keyFilter.subject}:${keyFilter.version}`;
+          if (!schemas.hasOwnProperty(key)) {
+            schemas[key] = keyFilter;
+          }
+        }
+      }
+
+      if (message.key) {
+        const split = message.subject.split("-value");
+        if (split.length == 2 && split[0] != "" && split[1] == "") {
+          const keyFilter = {
+            subject: split[0] + "-key",
+            version: message.keyVersion || "latest"
+          };
+          const key = `${keyFilter.subject}:${keyFilter.version}`;
+          if (!schemas.hasOwnProperty(key)) {
+            schemas[key] = keyFilter;
+          }
+        }
+      }
+    });
+
+    // ensure all schemas are downloaded, parsed and cached
+    // a better approach would be employing a mutex here to ensure getSchema won't race (cause avsc duplicate type error)
+    for (const filter of Object.values(schemas)) {
+      try {
+        await this.registry.getSchema(filter);
+      } catch (err) {
+        // unable to download a schema, ignore  the error in this phase
+        // as encode will pickup the error
+      }
+    }
+
+    // second phase: encode the messages
     return Promise.all(
       messages.map(async message => {
+        // hack to encode message.key based on assumption that 'subject-key' is exist in schema schema
+        // assumption: subject already has '-value', if otherwise fallback to original implmementation
+        if (message.key) {
+          const split = message.subject.split("-value");
+          if (split.length == 2 && split[0] != "" && split[1] == "") {
+            try {
+              const key = await this.registry.encode(
+                split[0] + "-key",
+                message.keyVersion || "latest",
+                message.key
+              );
+              message.key = key;
+            } catch (err) {
+              // maybe there's no schema for key, ignore
+            }
+          }
+        }
+
         const value = await this.registry.encode(
           message.subject,
           message.version || "latest",
