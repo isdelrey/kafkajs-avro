@@ -50,7 +50,7 @@ class Registry {
 
     // check if schema is in cache due to racing condition
     //   => the schema maybe already parsed and cached by its id string
-    const strId = id.toString();
+    const strId = (id || {}).toString();
     if (this.cache.has(strId)) {
       const { id, schema } = this.cache.get(strId);
       if (!schema) {
@@ -84,7 +84,7 @@ class Registry {
     /*
       The following line is not needed because this check is done in the eachMessage function of
       the consumer. It has not been removed in case this module is used alone in the future
-    
+
       if (object.readUInt8(0) !== 0)
         throw new Error(`Message doesn't contain schema identifier byte.`);
     */
