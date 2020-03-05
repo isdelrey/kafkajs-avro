@@ -14,11 +14,7 @@ class Registry {
     const key = filter.id ? filter.id : `${filter.subject}:${filter.version}`;
     /* Check if schema is in cache: */
     if (this.cache.has(key)) {
-      const { id, schema } = this.cache.get(key);
-      return {
-        id,
-        schema: avsc.parse(schema, this.parseOptions)
-      };
+      return this.cache.get(key);
     }
 
     /* Schema is not in cache, download it: */
@@ -44,7 +40,7 @@ class Registry {
     const parsedSchema = avsc.parse(schema, this.parseOptions);
 
     /* Result */
-    this.cache.set(key, { id: filter.id || id, schema });
+    this.cache.set(key, { id: filter.id || id, schema: parsedSchema });
     return { id: filter.id || id, schema: parsedSchema };
   }
   async encode(subject, version, originalMessage) {
